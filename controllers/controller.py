@@ -16,6 +16,10 @@ class Controller(ABC):
 
     def integral(self) -> float:
         return sum(self.error_history)
+    
+    @abstractmethod
+    def gen_params():
+        return
 
     @abstractmethod
     def calculate_control_value(self, error):
@@ -23,4 +27,8 @@ class Controller(ABC):
 
     @abstractmethod
     def update_params(self, lrate):
+        return
+    
+    @abstractmethod
+    def initialize(self, *params):
         return

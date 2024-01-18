@@ -1,5 +1,5 @@
 from .plant import Plant
-import numpy as np
+import jax.numpy as jnp
 
 
 class BathtubPlant(Plant):
@@ -12,7 +12,7 @@ class BathtubPlant(Plant):
 
     def calculate_velocity(self):
         gravity = 9.81
-        velocity = np.sqrt(2*gravity*self.height)
+        velocity = jnp.sqrt(2*gravity*self.height)
         return velocity
 
     def calculate_flow_rate(self):
