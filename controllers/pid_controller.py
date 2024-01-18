@@ -1,4 +1,5 @@
-from controller import Controller
+from .controller import Controller
+import jax
 
 
 class PIDController(Controller):
@@ -11,6 +12,9 @@ class PIDController(Controller):
     def calculate_control_value(self, error) -> float:
         super().calculate_control_value(error)
         return self.kp * error + self.ki * self.integral() + self.kd * self.derivative()
+
+    def update_params(self, lrate):
+        return
 
 
 if __name__ == '__main__':

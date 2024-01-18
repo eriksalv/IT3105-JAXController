@@ -20,3 +20,7 @@ class Controller(ABC):
     @abstractmethod
     def calculate_control_value(self, error):
         self.error_history.append(error)
+
+    @abstractmethod
+    def update_params(self, lrate):
+        return
