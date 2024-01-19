@@ -1,5 +1,6 @@
-from plant import Plant
-import numpy as np
+from .plant import Plant
+import jax.numpy as jnp
+from jax import random
 
 class BathtubPlant(Plant):
     def __init__(self, A, C, h_0):
@@ -11,7 +12,7 @@ class BathtubPlant(Plant):
 
     def calculate_velocity(self):
         gravity = 9.81
-        velocity = np.sqrt(2*gravity*self.height)
+        velocity = jnp.sqrt(2 * gravity * self.height)
         return velocity
     
     def calculate_flow_rate(self):
@@ -19,14 +20,19 @@ class BathtubPlant(Plant):
         return flow_rate
     
     def calculate_volume_change(self, U):
-        disturbance = np.random.uniform(-0.01, 0.01)
+        key = random.PRNGKey(42)
+        key, subkey = random.split(key)
+        disturbance = random.uniform(subkey, shape=(1,), minval=-0.01, maxval=0.01)[0]
         return U + disturbance - self.calculate_flow_rate()
     
     def calculate_height_change(self, U):
         return self.calculate_volume_change(U)/self.A
 
     def process(self, control_signal):
-        return self.calculate_height_change(control_signal)   
+        height_change= self.calculate_height_change(control_signal)   
+        self.height = self.height + height_change
+        self.height = jnp.max(jnp.array([self.height, 0])) # kan forkastes senere
+        return height_change
     
     def reset(self):
         self.height=self.h_0
@@ -35,4 +41,4 @@ class BathtubPlant(Plant):
 if __name__ == '__main__':
     plant = BathtubPlant(20, 5, 10)
     print(plant.process(2))
-   
+    print(plant.process(2))
