@@ -28,8 +28,8 @@ class BathtubPlant(Plant):
     def process(self, control_signal, noise):
         height_change= self.calculate_height_change(control_signal, noise)   
         self.height = self.height + height_change
-        self.height = jnp.max(jnp.array([self.height, 0])) # kan forkastes senere
-        return height_change
+        self.height = jnp.clip(self.height, 0, None) # kan forkastes senere
+        return self.height
     
     def reset(self):
         self.height=self.h_0
