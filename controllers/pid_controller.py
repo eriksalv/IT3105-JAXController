@@ -4,16 +4,17 @@ from jax import tree_util
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class PIDController(Controller):
     def gen_params(self):
-        kp = jnp.float32(1.0)
-        ki = jnp.float32(2.0)
-        kd = jnp.float32(3.0)
+        kp = np.random.uniform(-1, 1)
+        ki = np.random.uniform(-1, 1)
+        kd = np.random.uniform(-1, 1)
 
         self.param_history = []
         self.param_history.append([kp, ki, kd])
         params = (kp, ki, kd)
- 
+
         self.treedef = tree_util.tree_structure(params)
         return params
 
@@ -37,13 +38,14 @@ class PIDController(Controller):
     def plot_params(self):
         param_history_array = np.array(self.param_history)
 
-        plt.plot(param_history_array[:,0], label='kp')
-        plt.plot(param_history_array[:,1], label = 'ki')
-        plt.plot(param_history_array[:,2], label = 'kd')
+        plt.plot(param_history_array[:, 0], label='kp')
+        plt.plot(param_history_array[:, 1], label='ki')
+        plt.plot(param_history_array[:, 2], label='kd')
 
         plt.xlabel('Epoch')
         plt.legend()
         plt.show()
+
 
 if __name__ == '__main__':
     con = PIDController()
