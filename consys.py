@@ -1,4 +1,5 @@
 from controllers.controller import Controller
+from controllers.util import ReLU, linear, sigmoid, tanh
 from plants.plant import Plant
 from plants.bathtub_plant import BathtubPlant
 from plants.cournot_plant import CournotPlant
@@ -22,16 +23,18 @@ class CONSYS:
         self.min_noise = noise_range[0]
         self.max_noise = noise_range[1]
 
+
     def run_system(self):
         params = self.controller.gen_params()
         grad_func = value_and_grad(self.run_epoch, argnums=0)
         all_mse = []
-        for _ in range(self.epochs):
+        for i in range(self.epochs):
             flat_params = tree_util.tree_leaves(params)
             self.plant.reset()
             self.controller.reset()
             MSE, gradients = grad_func(flat_params)
             print(MSE)
+            
             all_mse.append(MSE)
             params = self.controller.update_params(
                 flat_params, self.lrate, gradients)
@@ -68,37 +71,26 @@ class CONSYS:
 
         plt.show()
         return
-
+    
+def main(controller_type, controller_params, plant_type, plant_params, consys_params):
+        
+        if controller_type == 'PID':
+            controller = PIDController(**controller_params)
+        if controller_type == 'NN':
+            controller = NNController(**controller_params)
+        if plant_type =='Bathtub':
+            plant = BathtubPlant(**plant_params)
+        if plant_type == 'Cournot':
+            plant = CournotPlant(**plant_params)
+        if plant_type == 'CC':
+            plant = CruiseControlPlant(**plant_params)
+        consys = CONSYS(plant, controller, **consys_params)
+        consys.run_system()
 
 if __name__ == '__main__':
-    np.random.seed(42)
-    # plant = CruiseControlPlant(20, 1400, 10, jnp.pi / 16)
-    # controller = NNController()
-    # consys = CONSYS(plant, controller)
-    # consys.run_system()
+    
+    main('NN', {'hidden_layers' :[5,3], 'activation_funcs': [ReLU, ReLU, sigmoid], 'weight_range': (-0.5, 0.2), 'bias_range': (-0.1, 0.1)},
+          'Cournot', {'pMax':5, 'cm':0.2},
+            {'lrate':5, 'epochs': 100, 'timesteps': 20, 'noise_range':(-0.01, 0.01)})
 
-    # print("Standard bathtub")
-    # plant = BathtubPlant(100, 1, 50)
-    # controller = PIDController()
-    # consys = CONSYS(plant, controller)
-    # consys.run_system()
-    # controller.plot_params()
-
-    # print("Neural net bathtub")
-    # plant = BathtubPlant(100, 1, 50)
-    # controller = NNController()
-    # consys = CONSYS(plant, controller)
-    # consys.run_system()
-
-    # print("Standard cournot")
-    # plant = CournotPlant(2, 0.3)
-    # controller = PIDController()
-    # consys = CONSYS(plant, controller)
-    # consys.run_system()
-    # controller.plot_params()
-
-    print("Neural net cournot")
-    plant = CournotPlant(2.5, 0.1)
-    controller = NNController()
-    consys = CONSYS(plant, controller)
-    consys.run_system()
+   
