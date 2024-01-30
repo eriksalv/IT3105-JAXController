@@ -1,3 +1,4 @@
+import json
 from controllers.controller import Controller
 from controllers.util import ReLU, linear, sigmoid, tanh
 from plants.plant import Plant
@@ -71,9 +72,31 @@ class CONSYS:
 
         plt.show()
         return
-    
-def main(controller_type, controller_params, plant_type, plant_params, consys_params):
+
+def read_json(filepath):
+    with open(filepath, 'r') as file:
+            data = json.load(file)
+         
         
+    activation_functions = {
+    "sigmoid": sigmoid,
+    "ReLU": ReLU,
+    "tanh": tanh,
+    "linear": linear
+    }
+    
+    controller_type = data["controller"]
+    controller_params = data.get("controller_params", {})
+    plant_type = data.get("plant", "")
+    plant_params = data.get("plant_params", {})
+    consys_params = data.get("consys_params", {})
+
+    controller_params["activation_funcs"] = [activation_functions[name] for name in controller_params["activation_funcs"]]
+    return controller_type, controller_params, plant_type, plant_params, consys_params
+
+def main(filepath):
+        
+        controller_type, controller_params, plant_type, plant_params, consys_params = read_json(filepath)
         if controller_type == 'PID':
             controller = PIDController(**controller_params)
         if controller_type == 'NN':
@@ -88,9 +111,7 @@ def main(controller_type, controller_params, plant_type, plant_params, consys_pa
         consys.run_system()
 
 if __name__ == '__main__':
-    
-    main('NN', {'hidden_layers' :[5,3], 'activation_funcs': [ReLU, ReLU, sigmoid], 'weight_range': (-0.5, 0.2), 'bias_range': (-0.1, 0.1)},
-          'Cournot', {'pMax':5, 'cm':0.2},
-            {'lrate':5, 'epochs': 100, 'timesteps': 20, 'noise_range':(-0.01, 0.01)})
+
+    main('runs/nn-cournot.json')
 
    
