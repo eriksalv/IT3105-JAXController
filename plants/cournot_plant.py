@@ -9,7 +9,8 @@ class CournotPlant(Plant):
         self.q1 = 0.5
         self.q2 = 0.5
         self.T = 1
-        self.q=None
+        self.q = None
+
     def process(self, U, noise):
         self.q1 = jnp.clip(self.q1 + U, 0, 1)
         self.q2 = jnp.clip(self.q2 + noise, 0, 1)

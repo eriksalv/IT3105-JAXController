@@ -1,21 +1,21 @@
 {
-    "controller": "NN",
-    "controller_params": {
-      "hidden_layers": [5],
-      "activation_funcs": ["ReLU", "ReLU"],
-      "weight_range": [-0.1, 0.1],
-      "bias_range": [-0.1, 0.1]
-    },
-    "plant": "Bathtub",
-    "plant_params": {
-      "A": 100,
-      "C": 1,
-      "h0":50
-    },
-    "consys_params": {
-      "lrate": 0.1,
-      "epochs": 100,
-      "timesteps": 20,
-      "noise_range": [-0.01, 0.01]
-    }
+  "controller": "NN",
+  "controller_params": {
+    "hidden_layers": [5],
+    "activation_funcs": ["ReLU", "ReLU"],
+    "weight_range": [-0.1, 0.1],
+    "bias_range": [-0.1, 0.1]
+  },
+  "plant": "Bathtub",
+  "plant_params": {
+    "A": 100,
+    "C": 1,
+    "h0": 50
+  },
+  "consys_params": {
+    "lrate": 0.1,
+    "epochs": 100,
+    "timesteps": 20,
+    "noise_range": [-0.01, 0.01]
   }
+}

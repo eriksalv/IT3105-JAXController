@@ -24,18 +24,17 @@ class CONSYS:
         self.min_noise = noise_range[0]
         self.max_noise = noise_range[1]
 
-
     def run_system(self):
         params = self.controller.gen_params()
         grad_func = value_and_grad(self.run_epoch, argnums=0)
         all_mse = []
-        for i in range(self.epochs):
+        for _ in range(self.epochs):
             flat_params = tree_util.tree_leaves(params)
             self.plant.reset()
             self.controller.reset()
             MSE, gradients = grad_func(flat_params)
             print(MSE)
-            
+
             all_mse.append(MSE)
             params = self.controller.update_params(
                 flat_params, self.lrate, gradients)
@@ -73,55 +72,59 @@ class CONSYS:
         plt.show()
         return
 
+
 def read_json(filepath):
     with open(filepath, 'r') as file:
-            data = json.load(file)
-         
-        
+        data = json.load(file)
+
     activation_functions = {
-    "sigmoid": sigmoid,
-    "ReLU": ReLU,
-    "tanh": tanh,
-    "linear": linear
+        "sigmoid": sigmoid,
+        "ReLU": ReLU,
+        "tanh": tanh,
+        "linear": linear
     }
 
     controller_type = data["controller"]
     if controller_type == 'NN':
         controller_params = data.get("controller_params", {})
-        controller_params["activation_funcs"] = [activation_functions[name] for name in controller_params["activation_funcs"]]
+        controller_params["activation_funcs"] = [activation_functions[name]
+                                                 for name in controller_params["activation_funcs"]]
     else:
-        controller_params=None
+        controller_params = None
 
     plant_type = data.get("plant", "")
     plant_params = data.get("plant_params", {})
     consys_params = data.get("consys_params", {})
 
-    
     return controller_type, controller_params, plant_type, plant_params, consys_params
 
+
 def main(filepath):
-        
-        controller_type, controller_params, plant_type, plant_params, consys_params = read_json(filepath)
-        if controller_type == 'PID':
-            controller = PIDController()
-        if controller_type == 'NN':
-            controller = NNController(**controller_params)
-        if plant_type =='Bathtub':
-            plant = BathtubPlant(**plant_params)
-        if plant_type == 'Cournot':
-            plant = CournotPlant(**plant_params)
-        if plant_type == 'CC':
-            plant = CruiseControlPlant(**plant_params)
-        consys = CONSYS(plant, controller, **consys_params)
-        consys.run_system()
+    controller_type, controller_params, plant_type, plant_params, consys_params = read_json(
+        filepath)
+
+    if controller_type == 'PID':
+        controller = PIDController()
+    if controller_type == 'NN':
+        controller = NNController(**controller_params)
+    if plant_type == 'Bathtub':
+        plant = BathtubPlant(**plant_params)
+    if plant_type == 'Cournot':
+        plant = CournotPlant(**plant_params)
+    if plant_type == 'CC':
+        plant = CruiseControlPlant(**plant_params)
+
+    consys = CONSYS(plant, controller, **consys_params)
+    consys.run_system()
+
 
 if __name__ == '__main__':
     np.random.seed(42)
-    #main('runs/nn-cournot.json')
-    #main('runs/pid-cournot.json')
+    # main('runs/nn-cournot.json')
+    # main('runs/pid-cournot.json')
 
-    #main('runs/nn-cc.json')
-    #main('runs/pid-cc.json')
-    
-    #main('runs/nn-bathtub.json')
-    main('runs/pid-bathtub.json')
+    # main('runs/nn-cc.json')
+    # main('runs/pid-cc.json')
+
+    # main('runs/nn-bathtub.json')
+    main('runs/nn-bathtub.json')

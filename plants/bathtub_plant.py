@@ -9,19 +9,6 @@ class BathtubPlant(Plant):
         self.h0 = h0
         self.height = h0
 
-    def calculate_velocity(self):
-        return jnp.sqrt(2 * 9.81 * self.height)
-
-    def calculate_flow_rate(self):
-        flow_rate = self.calculate_velocity()*self.C
-        return flow_rate
-
-    def calculate_volume_change(self, U, noise):
-        return U + noise - self.calculate_flow_rate()
-
-    def calculate_height_change(self, U, noise):
-        return self.calculate_volume_change(U, noise)/self.A
-
     def process(self, U, noise):
         velocity = jnp.sqrt(2 * 9.81 * self.height)
         flow_rate = velocity * self.C

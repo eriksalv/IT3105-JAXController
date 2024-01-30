@@ -1,23 +1,22 @@
 {
-    "controller": "NN",
-    "controller_params": {
-      "hidden_layers": [5],
-      "activation_funcs": ["ReLU", "ReLU"],
-      "weight_range": [-0.1, 0.1],
-      "bias_range": [-0.1, 0.1]
-    },
-    "plant": "CC",
-    "plant_params": {
-      "v0": 20,
-      "m": 1400,
-      "c":10,
-      "theta": 0.19634954084936207
-    },
-    "consys_params": {
-      "lrate": 0.1,
-      "epochs": 100,
-      "timesteps": 20,
-      "noise_range": [-0.01, 0.01]
-    }
+  "controller": "NN",
+  "controller_params": {
+    "hidden_layers": [5],
+    "activation_funcs": ["ReLU", "ReLU"],
+    "weight_range": [-0.1, 0.1],
+    "bias_range": [-0.1, 0.1]
+  },
+  "plant": "CC",
+  "plant_params": {
+    "v0": 20,
+    "m": 1400,
+    "c": 10,
+    "theta": 0.19634954084936207
+  },
+  "consys_params": {
+    "lrate": 0.1,
+    "epochs": 100,
+    "timesteps": 20,
+    "noise_range": [-0.01, 0.01]
   }
-  
+}

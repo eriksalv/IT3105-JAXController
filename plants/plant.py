@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Plant:
+class Plant(ABC):
     @abstractmethod
     def process(self, U, noise):
         return

@@ -1,18 +1,15 @@
 {
-    "controller": "PID",
-    "controller_params": {
-     
-    },
-    "plant": "Cournot",
-    "plant_params": {
-      "pMax": 5,
-      "cm": 0.2
-    },
-    "consys_params": {
-      "lrate": 0.01,
-      "epochs": 100,
-      "timesteps": 20,
-      "noise_range": [-0.01, 0.01]
-    }
+  "controller": "PID",
+  "controller_params": {},
+  "plant": "Cournot",
+  "plant_params": {
+    "pMax": 5,
+    "cm": 0.2
+  },
+  "consys_params": {
+    "lrate": 0.01,
+    "epochs": 100,
+    "timesteps": 20,
+    "noise_range": [-0.01, 0.01]
   }
-  
+}
