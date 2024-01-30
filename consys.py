@@ -116,7 +116,8 @@ def main(filepath):
 
     consys = CONSYS(plant, controller, **consys_params)
     consys.run_system()
-
+    if controller_type == 'PID':
+        controller.plot_params()
 
 if __name__ == '__main__':
     np.random.seed(42)
@@ -127,4 +128,4 @@ if __name__ == '__main__':
     # main('runs/pid-cc.json')
 
     # main('runs/nn-bathtub.json')
-    main('runs/nn-bathtub.json')
+    # main('runs/pid-bathtub.json')
