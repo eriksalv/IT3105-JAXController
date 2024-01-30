@@ -48,7 +48,7 @@ class CONSYS:
         # TODO: make range adjustable
         params = tree_util.tree_unflatten(self.controller.treedef, flat_params)
         self.controller.initialize(params)
-        key = random.PRNGKey(123)
+        key = random.PRNGKey(42)
         key, subkey = random.split(key)
         noises = random.uniform(subkey, shape=(
             self.timesteps,), minval=-self.min_noise, maxval=self.max_noise)
@@ -84,21 +84,26 @@ def read_json(filepath):
     "tanh": tanh,
     "linear": linear
     }
-    
+
     controller_type = data["controller"]
-    controller_params = data.get("controller_params", {})
+    if controller_type == 'NN':
+        controller_params = data.get("controller_params", {})
+        controller_params["activation_funcs"] = [activation_functions[name] for name in controller_params["activation_funcs"]]
+    else:
+        controller_params=None
+
     plant_type = data.get("plant", "")
     plant_params = data.get("plant_params", {})
     consys_params = data.get("consys_params", {})
 
-    controller_params["activation_funcs"] = [activation_functions[name] for name in controller_params["activation_funcs"]]
+    
     return controller_type, controller_params, plant_type, plant_params, consys_params
 
 def main(filepath):
         
         controller_type, controller_params, plant_type, plant_params, consys_params = read_json(filepath)
         if controller_type == 'PID':
-            controller = PIDController(**controller_params)
+            controller = PIDController()
         if controller_type == 'NN':
             controller = NNController(**controller_params)
         if plant_type =='Bathtub':
@@ -111,7 +116,12 @@ def main(filepath):
         consys.run_system()
 
 if __name__ == '__main__':
+    np.random.seed(42)
+    #main('runs/nn-cournot.json')
+    #main('runs/pid-cournot.json')
 
-    main('runs/nn-cournot.json')
-
-   
+    #main('runs/nn-cc.json')
+    #main('runs/pid-cc.json')
+    
+    #main('runs/nn-bathtub.json')
+    main('runs/pid-bathtub.json')
