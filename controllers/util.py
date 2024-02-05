@@ -11,3 +11,7 @@ def ReLU(x):
 
 def tanh(x):
     return jnp.tanh(x)
+
+
+def linear(x):
+    return x

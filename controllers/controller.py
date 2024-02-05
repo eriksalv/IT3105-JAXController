@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+import jax.numpy as jnp
+
 
 class Controller(ABC):
     def __init__(self) -> None:
@@ -20,3 +22,11 @@ class Controller(ABC):
     @abstractmethod
     def calculate_control_value(self, error):
         self.error_history.append(error)
+
+    @abstractmethod
+    def gen_params(self):
+        return
+
+    @abstractmethod
+    def update_params(self, params, lrate, gradients):
+        return

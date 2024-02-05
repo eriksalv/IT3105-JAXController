@@ -1,0 +1,16 @@
+{
+  "controller": "PID",
+  "controller_params": {},
+  "plant": "Bathtub",
+  "plant_params": {
+    "A": 100,
+    "C": 1,
+    "h0": 50
+  },
+  "consys_params": {
+    "lrate": 0.1,
+    "epochs": 100,
+    "timesteps": 20,
+    "noise_range": [-0.01, 0.01]
+  }
+}

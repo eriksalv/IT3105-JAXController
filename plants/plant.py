@@ -1,8 +1,11 @@
-class Plant:
-    def __init__(self):
-        pass
+from abc import ABC, abstractmethod
 
-    def process(self, control_signal):
-        pass
+
+class Plant(ABC):
+    @abstractmethod
+    def process(self, U, noise):
+        return
+
+    @abstractmethod
     def reset(self):
-        pass
+        return
