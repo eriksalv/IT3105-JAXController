@@ -3,6 +3,20 @@ import jax.numpy as jnp
 
 
 class CruiseControlPlant(Plant):
+    """Cruise control system
+
+    Parameters
+    ----------
+    v0 : float
+        initial velocity
+    m : float
+        mass of vehicle
+    c : float
+        drag coefficient
+    theta : float
+        angle of slope
+    """
+
     def __init__(self, v0, m, c, theta):
         self.v0 = v0
         self.v = v0

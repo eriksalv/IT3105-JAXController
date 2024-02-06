@@ -36,6 +36,8 @@ class PIDController(Controller):
         return kp_new, ki_new, kd_new
 
     def plot_params(self):
+        """Plots parameter history for kp, ki, kd
+        """
         param_history_array = np.array(self.param_history)
 
         plt.plot(param_history_array[:, 0], label='kp')

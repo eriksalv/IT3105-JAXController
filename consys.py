@@ -166,4 +166,4 @@ if __name__ == '__main__':
     # main('runs/pid-cc.json')
 
     # main('runs/nn-bathtub.json')
-    # main('runs/pid-bathtub.json')
+    main('runs/pid-bathtub.json')
