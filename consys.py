@@ -44,7 +44,6 @@ class CONSYS:
         """
         Runs a single epoch and returns MSE
         """
-        # TODO: make range adjustable
         params = tree_util.tree_unflatten(self.controller.treedef, flat_params)
         self.controller.initialize(params)
         key = random.PRNGKey(42)
@@ -54,13 +53,11 @@ class CONSYS:
         control = 0
         for timestep in range(self.timesteps):
             control = self.run_timestep(control, noises[timestep])
-            # print(f'Step {timestep}: control = {control}')
         return jnp.mean(jnp.square(jnp.array(self.controller.error_history)))
 
     def run_timestep(self, control, noise):
         output = self.plant.process(control, noise)
         error = self.plant.get_target() - output
-        # print(f'output = {output}, error = {error}')
         return self.controller.calculate_control_value(error)
 
     def plot_mse(self, all_mse):
@@ -118,6 +115,7 @@ def main(filepath):
     consys.run_system()
     if controller_type == 'PID':
         controller.plot_params()
+
 
 if __name__ == '__main__':
     np.random.seed(42)

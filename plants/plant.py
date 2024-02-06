@@ -9,3 +9,7 @@ class Plant(ABC):
     @abstractmethod
     def reset(self):
         return
+
+    @abstractmethod
+    def get_target(self):
+        return
